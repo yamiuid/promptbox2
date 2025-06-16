@@ -1,0 +1,19 @@
+{
+  "compatibilityMode": false,
+  "serverRenderingMode": false,
+  "staticSiteMode": true,
+  "headers": {
+    "/*.js": {
+      "Content-Type": "application/javascript; charset=UTF-8"
+    },
+    "/*.css": {
+      "Content-Type": "text/css; charset=UTF-8"
+    },
+    "/*.json": {
+      "Content-Type": "application/json; charset=UTF-8"
+    },
+    "/*.mjs": {
+      "Content-Type": "application/javascript; charset=UTF-8"
+    }
+  }
+} 
