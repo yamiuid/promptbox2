@@ -1,1 +1,11 @@
 /* /index.html 200
+
+# 添加正确的内容类型头
+/assets/*.js /assets/:splat 200
+Content-Type: application/javascript; charset=utf-8
+
+/assets/*.css /assets/:splat 200
+Content-Type: text/css; charset=utf-8
+
+/assets/*.json /assets/:splat 200
+Content-Type: application/json; charset=utf-8

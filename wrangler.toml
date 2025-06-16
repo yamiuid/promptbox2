@@ -1,0 +1,40 @@
+# wrangler.toml 配置文件
+name = "prompt-peek-gallery"
+
+[site]
+bucket = "./dist"
+
+[build]
+command = "npm run build"
+output_directory = "dist"
+
+# 添加路由和内容类型配置
+[[rules]]
+type = "mime"
+globs = ["*.js"]
+content_type = "application/javascript"
+charset = "utf-8"
+
+[[rules]]
+type = "mime"
+globs = ["*.css"]
+content_type = "text/css"
+charset = "utf-8"
+
+[[rules]]
+type = "mime"
+globs = ["*.json"]
+content_type = "application/json"
+charset = "utf-8"
+
+[[rules]]
+type = "mime"
+globs = ["*.svg"]
+content_type = "image/svg+xml"
+charset = "utf-8"
+
+# 设置 SPA 模式
+[[redirects]]
+source = "/*"
+destination = "/index.html"
+status = 200 

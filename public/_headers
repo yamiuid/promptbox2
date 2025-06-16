@@ -11,6 +11,9 @@
 /*.js
   Content-Type: application/javascript
 
+/*.mjs
+  Content-Type: application/javascript
+
 /*.css
   Content-Type: text/css
 
@@ -22,3 +25,6 @@
 
 /*.svg
   Content-Type: image/svg+xml
+
+/*.json
+  Content-Type: application/json

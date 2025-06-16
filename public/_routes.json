@@ -7,7 +7,39 @@
     "/icons/*",
     "/images/*"
   ],
+  "headers": [
+    {
+      "for": "/*.js",
+      "values": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      }
+    },
+    {
+      "for": "/*.css",
+      "values": {
+        "Content-Type": "text/css; charset=utf-8"
+      }
+    },
+    {
+      "for": "/*.json",
+      "values": {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    }
+  ],
   "routes": [
+    {
+      "src": "/(.*)\\.js$",
+      "headers": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      }
+    },
+    {
+      "src": "/(.*)\\.css$", 
+      "headers": {
+        "Content-Type": "text/css; charset=utf-8"
+      }
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
