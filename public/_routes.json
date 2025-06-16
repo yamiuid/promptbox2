@@ -5,7 +5,9 @@
     "/_assets/*",
     "/build/*",
     "/icons/*",
-    "/images/*"
+    "/images/*",
+    "/_headers",
+    "/_redirects"
   ],
   "headers": [
     {

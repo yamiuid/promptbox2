@@ -1,11 +1,51 @@
 // 复制文件脚本
-import { cpSync, mkdirSync, existsSync } from 'fs';
-import { join } from 'path';
+import fs from 'fs';
+import path from 'path';
 
-const publicDir = './public';
-const distDir = './dist';
+const publicDir = 'public';
+const distDir = 'dist';
 
-// 要复制的文件和目录
+// 确保目录存在
+function ensureDirectoryExistence(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+    console.log(`创建目录: ${dirPath}`);
+  }
+}
+
+// 复制文件
+function copyFile(source, target) {
+  try {
+    fs.copyFileSync(source, target);
+    console.log(`文件 ${path.basename(source)} 复制成功`);
+  } catch (err) {
+    console.error(`复制文件 ${source} 失败:`, err);
+  }
+}
+
+// 递归复制目录
+function copyDir(source, target) {
+  ensureDirectoryExistence(target);
+  
+  const files = fs.readdirSync(source);
+  
+  for (const file of files) {
+    const sourcePath = path.join(source, file);
+    const targetPath = path.join(target, file);
+    
+    const stat = fs.statSync(sourcePath);
+    
+    if (stat.isDirectory()) {
+      copyDir(sourcePath, targetPath);
+    } else {
+      copyFile(sourcePath, targetPath);
+    }
+  }
+  
+  console.log(`目录 ${path.basename(source)} 复制成功`);
+}
+
+// CloudFlare Pages 关键文件
 const filesToCopy = [
   '_redirects',
   '_headers',
@@ -14,45 +54,68 @@ const filesToCopy = [
   'site.webmanifest'
 ];
 
-// 要复制的目录
-const directoriesToCopy = [
+// 特殊目录
+const dirsToCopy = [
   '.well-known'
 ];
 
-console.log('开始复制文件到 dist 目录...');
-
-// 复制文件
-filesToCopy.forEach(file => {
-  const sourcePath = join(publicDir, file);
-  const targetPath = join(distDir, file);
+// 复制关键文件
+for (const file of filesToCopy) {
+  const sourcePath = path.join(publicDir, file);
+  const targetPath = path.join(distDir, file);
   
-  try {
+  if (fs.existsSync(sourcePath)) {
     console.log(`复制 ${sourcePath} 到 ${targetPath}`);
-    cpSync(sourcePath, targetPath, { force: true });
-    console.log(`文件 ${file} 复制成功`);
-  } catch (error) {
-    console.error(`复制文件 ${file} 时出错:`, error.message);
+    copyFile(sourcePath, targetPath);
+  } else {
+    console.warn(`警告: 文件 ${sourcePath} 不存在，跳过`);
   }
-});
+}
 
-// 复制目录
-directoriesToCopy.forEach(dir => {
-  const sourcePath = join(publicDir, dir);
-  const targetPath = join(distDir, dir);
+// 复制特殊目录
+for (const dir of dirsToCopy) {
+  const sourcePath = path.join(publicDir, dir);
+  const targetPath = path.join(distDir, dir);
   
-  try {
-    // 确保目标目录存在
-    if (!existsSync(targetPath)) {
-      console.log(`创建目录 ${targetPath}`);
-      mkdirSync(targetPath, { recursive: true });
-    }
-    
+  if (fs.existsSync(sourcePath)) {
     console.log(`复制目录 ${sourcePath} 到 ${targetPath}`);
-    cpSync(sourcePath, targetPath, { recursive: true, force: true });
-    console.log(`目录 ${dir} 复制成功`);
-  } catch (error) {
-    console.error(`复制目录 ${dir} 时出错:`, error.message);
+    copyDir(sourcePath, targetPath);
+  } else {
+    console.warn(`警告: 目录 ${sourcePath} 不存在，跳过`);
   }
-});
+}
+
+// 创建常用清单文件（如果不存在）
+const manifestFiles = [
+  { path: 'site.webmanifest', content: JSON.stringify({
+    name: "Prompt Peek Gallery",
+    short_name: "Prompt Peek",
+    icons: [
+      {
+        src: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png"
+      },
+      {
+        src: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png"
+      }
+    ],
+    theme_color: "#ffffff",
+    background_color: "#ffffff",
+    display: "standalone"
+  }, null, 2) }
+];
+
+// 确保清单文件存在
+for (const file of manifestFiles) {
+  const targetPath = path.join(distDir, file.path);
+  
+  if (!fs.existsSync(targetPath) && file.content) {
+    console.log(`创建文件 ${targetPath}`);
+    fs.writeFileSync(targetPath, file.content);
+  }
+}
 
 console.log('文件复制完成！'); 

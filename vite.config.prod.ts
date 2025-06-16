@@ -22,9 +22,9 @@ export default defineConfig({
           'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast', '@radix-ui/react-tooltip'],
           'supabase': ['@supabase/supabase-js']
         },
-        // 确保 JS 文件扩展名，以便正确识别 MIME 类型
-        entryFileNames: 'assets/[name].[hash]',
-        chunkFileNames: 'assets/[name].[hash]',
+        // 确保 JS 文件扩展名已包含，避免 CloudFlare MIME 类型问题
+        entryFileNames: 'assets/[name].[hash].js',
+        chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash].[ext]'
       }
     },
