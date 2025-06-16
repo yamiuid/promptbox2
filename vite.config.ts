@@ -29,6 +29,9 @@ export default defineConfig(({ mode }) => ({
         }
       }
     },
-    sourcemap: true
+    sourcemap: true,
+    assetsDir: "assets",
+    emptyOutDir: true,
+    copyPublicDir: true
   }
 }));
