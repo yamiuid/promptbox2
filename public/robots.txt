@@ -1,0 +1,27 @@
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+Sitemap: https://promptbox.art/sitemap.xml
+
+# 优化爬虫行为
+Crawl-delay: 1
+
+# 禁止访问敏感目录
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /src/
+Disallow: /node_modules/
