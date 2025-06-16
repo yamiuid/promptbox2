@@ -3,9 +3,13 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.9.2",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build && cp public/_redirects dist/ && cp public/_headers dist/ && cp public/_routes.json dist/ && cp public/_worker.js dist/ || true",
     "build:dev": "vite build --mode development",
     "build:cloudflare": "cp public/_redirects dist/_redirects && cp public/_headers dist/_headers && cp public/_routes.json dist/_routes.json",
     "lint": "eslint .",
