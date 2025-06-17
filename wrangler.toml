@@ -10,7 +10,7 @@ pages_build_output_dir = "dist"
 
 [build]
 command = "npm run build:cloudflare"
-upload.format = "service-worker"
+
 # Worker 配置
 [build.upload]
 dir = "dist"
