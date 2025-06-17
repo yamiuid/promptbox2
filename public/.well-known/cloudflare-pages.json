@@ -1,25 +1,18 @@
 {
-  "compatibilityMode": false,
-  "serverRenderingMode": false,
   "staticSiteMode": true,
+  "spa": true,
   "headers": {
     "/*.js": {
-      "Content-Type": "application/javascript; charset=UTF-8"
+      "Content-Type": "application/javascript; charset=utf-8"
     },
     "/assets/*.js": {
-      "Content-Type": "application/javascript; charset=UTF-8"
+      "Content-Type": "application/javascript; charset=utf-8"
     },
     "/*.css": {
-      "Content-Type": "text/css; charset=UTF-8"
-    },
-    "/*.json": {
-      "Content-Type": "application/json; charset=UTF-8"
-    },
-    "/*.mjs": {
-      "Content-Type": "application/javascript; charset=UTF-8"
+      "Content-Type": "text/css; charset=utf-8"
     },
     "/site.webmanifest": {
-      "Content-Type": "application/manifest+json; charset=UTF-8"
+      "Content-Type": "application/manifest+json; charset=utf-8"
     }
   },
   "mimeTypes": {
@@ -28,11 +21,6 @@
     "css": "text/css",
     "html": "text/html",
     "json": "application/json",
-    "png": "image/png",
-    "jpg": "image/jpeg",
-    "jpeg": "image/jpeg",
-    "svg": "image/svg+xml",
-    "webmanifest": "application/manifest+json",
-    "ico": "image/x-icon"
+    "webmanifest": "application/manifest+json"
   }
 } 

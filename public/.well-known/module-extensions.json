@@ -1,3 +1,3 @@
 {
-  "extensions": [".js", ".mjs", ".tsx", ".ts", ".jsx"]
+  "extensions": [".js", ".mjs"]
 } 

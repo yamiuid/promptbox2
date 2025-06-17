@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// CloudFlare 专用构建脚本
+// Cloudflare部署构建脚本
 import fs from 'fs';
 import path from 'path';
 
@@ -10,7 +10,6 @@ const distDir = 'dist';
 function ensureDirectoryExistence(dirPath) {
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath, { recursive: true });
-    console.log(`创建目录: ${dirPath}`);
   }
 }
 
@@ -18,9 +17,9 @@ function ensureDirectoryExistence(dirPath) {
 function copyFile(source, target) {
   try {
     fs.copyFileSync(source, target);
-    console.log(`文件 ${path.basename(source)} 复制成功`);
+    console.log(`已复制: ${path.basename(source)}`);
   } catch (err) {
-    console.error(`复制文件 ${source} 失败:`, err);
+    console.error(`错误: ${path.basename(source)}:`, err.message);
   }
 }
 
@@ -42,23 +41,11 @@ function copyDir(source, target) {
       copyFile(sourcePath, targetPath);
     }
   }
-  
-  console.log(`目录 ${path.basename(source)} 复制成功`);
 }
 
-// CloudFlare Pages 关键文件
-const filesToCopy = [
-  '_redirects',
-  '_headers',
-  '_routes.json',
-  '_worker.js',
-  'site.webmanifest'
-];
-
-// 特殊目录
-const dirsToCopy = [
-  '.well-known'
-];
+// 关键文件列表
+const filesToCopy = ['_redirects', '_headers', '_routes.json', '_worker.js', 'site.webmanifest'];
+const dirsToCopy = ['.well-known'];
 
 // 复制关键文件
 for (const file of filesToCopy) {
@@ -66,10 +53,7 @@ for (const file of filesToCopy) {
   const targetPath = path.join(distDir, file);
   
   if (fs.existsSync(sourcePath)) {
-    console.log(`复制 ${sourcePath} 到 ${targetPath}`);
     copyFile(sourcePath, targetPath);
-  } else {
-    console.warn(`警告: 文件 ${sourcePath} 不存在，跳过`);
   }
 }
 
@@ -79,16 +63,14 @@ for (const dir of dirsToCopy) {
   const targetPath = path.join(distDir, dir);
   
   if (fs.existsSync(sourcePath)) {
-    console.log(`复制目录 ${sourcePath} 到 ${targetPath}`);
     copyDir(sourcePath, targetPath);
-  } else {
-    console.warn(`警告: 目录 ${sourcePath} 不存在，跳过`);
   }
 }
 
-// 创建 Cloudflare Pages 识别文件
+// 创建Cloudflare Pages配置文件
 const pagesFile = path.join(distDir, '.well-known', 'cloudflare-pages.json');
 ensureDirectoryExistence(path.join(distDir, '.well-known'));
+
 fs.writeFileSync(pagesFile, JSON.stringify({
   "spa": true,
   "routes": [
@@ -103,19 +85,16 @@ fs.writeFileSync(pagesFile, JSON.stringify({
     ".webmanifest": "application/manifest+json"
   }
 }, null, 2));
-console.log('创建 Cloudflare Pages 配置文件');
 
-// 修复 index.html 中的引用
+// 修复index.html
 const indexPath = path.join(distDir, 'index.html');
 if (fs.existsSync(indexPath)) {
   let content = fs.readFileSync(indexPath, 'utf8');
   
-  // 确保有 Cloudflare Pages SPA 注释
   if (!content.includes('<!-- Cloudflare Pages SPA -->')) {
     content = content.replace('</head>', '<!-- Cloudflare Pages SPA -->\n  </head>');
     fs.writeFileSync(indexPath, content);
-    console.log('添加 Cloudflare Pages SPA 注释到 index.html');
   }
 }
 
-console.log('Cloudflare 构建后处理完成！'); 
+console.log('Cloudflare构建完成!'); 

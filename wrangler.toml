@@ -1,24 +1,22 @@
 # wrangler.toml 配置文件
 name = "prompt-peek-gallery"
 
-# Pages 配置
+# 基本配置
 [site]
 bucket = "./dist"
-
-# 输出目录配置
 pages_build_output_dir = "dist"
 
 # 构建命令
 [build]
 command = "npm run build:cloudflare"
 
-# Worker 配置
+# Worker配置
 [build.upload]
 dir = "dist"
 main = "./_worker.js"
 format = "modules"
 
-# 重要的MIME类型规则
+# MIME类型规则
 [[rules]]
 type = "mime"
 globs = ["*.js", "assets/*.js"]
@@ -34,7 +32,7 @@ type = "mime"
 globs = ["site.webmanifest"]
 content_type = "application/manifest+json"
 
-# SPA 路由规则
+# SPA路由
 [[redirects]]
 source = "/*"
 destination = "/index.html"
