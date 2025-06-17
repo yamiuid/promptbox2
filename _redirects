@@ -1,1 +1,8 @@
-/*    /index.html   200 
+# 避免循环重定向的单页应用重定向规则
+/app/*    /index.html   200
+/auth/*    /index.html   200
+/artwork/*    /index.html   200
+/my-content/*    /index.html   200
+/my-favorites/*    /index.html   200
+/my-likes/*    /index.html   200
+/upload/*    /index.html   200 

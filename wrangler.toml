@@ -1,17 +1,32 @@
 # wrangler.toml 配置文件
 name = "prompt-peek-gallery"
 
+# Pages 专用配置
 [site]
 bucket = "./dist"
 
+# 新增 Pages 输出目录配置
+pages_build_output_dir = "dist"
+
 [build]
-command = "npm run build"
-output_directory = "dist"
+command = "npm run build:cloudflare"
+upload.format = "service-worker"
+# Worker 配置
+[build.upload]
+dir = "dist"
+main = "./_worker.js"
+format = "modules"
 
 # 添加路由和内容类型配置
 [[rules]]
 type = "mime"
 globs = ["*.js"]
+content_type = "application/javascript"
+charset = "utf-8"
+
+[[rules]]
+type = "mime"
+globs = ["assets/*.js"]
 content_type = "application/javascript"
 charset = "utf-8"
 
@@ -33,8 +48,44 @@ globs = ["*.svg"]
 content_type = "image/svg+xml"
 charset = "utf-8"
 
-# 设置 SPA 模式
+[[rules]]
+type = "mime"
+globs = ["site.webmanifest"]
+content_type = "application/manifest+json"
+charset = "utf-8"
+
+# 设置 SPA 模式 
 [[redirects]]
-source = "/*"
+source = "/app/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/auth/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/artwork/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/my-content/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/my-favorites/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/my-likes/*"
+destination = "/index.html"
+status = 200
+
+[[redirects]]
+source = "/upload/*"
 destination = "/index.html"
 status = 200 
