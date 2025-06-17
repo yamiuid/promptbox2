@@ -11,7 +11,7 @@
     "dev": "vite",
     "build": "vite build --config vite.config.prod.ts && node ./scripts/copy-files.js",
     "build:dev": "vite build --mode development",
-    "build:cloudflare": "vite build --config vite.config.prod.ts && cp public/_redirects dist/ && cp public/_headers dist/ && cp public/_routes.json dist/ && cp public/_worker.js dist/ && cp public/.well-known dist/ -r || true",
+    "build:cloudflare": "vite build --config vite.config.prod.ts && node ./scripts/copy-files.js && cp src/_worker.js dist/ || true",
     "lint": "eslint .",
     "preview": "vite preview"
   },
