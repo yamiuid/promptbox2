@@ -35,5 +35,11 @@ export default defineConfig({
     outDir: "dist",
     // 确保 HTML 文件正确引用 JS 文件
     assetsInlineLimit: 0
+  },
+  // 添加特定的服务器配置，确保开发时也使用正确的 MIME 类型
+  server: {
+    headers: {
+      'Content-Type': 'application/javascript; charset=utf-8'
+    }
   }
 }); 

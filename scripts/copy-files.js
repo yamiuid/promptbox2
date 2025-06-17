@@ -87,25 +87,28 @@ for (const dir of dirsToCopy) {
 
 // 创建常用清单文件（如果不存在）
 const manifestFiles = [
-  { path: 'site.webmanifest', content: JSON.stringify({
-    name: "Prompt Peek Gallery",
-    short_name: "Prompt Peek",
-    icons: [
-      {
-        src: "/android-chrome-192x192.png",
-        sizes: "192x192",
-        type: "image/png"
-      },
-      {
-        src: "/android-chrome-512x512.png",
-        sizes: "512x512",
-        type: "image/png"
-      }
-    ],
-    theme_color: "#ffffff",
-    background_color: "#ffffff",
-    display: "standalone"
-  }, null, 2) }
+  { 
+    path: 'site.webmanifest', 
+    content: JSON.stringify({
+      "name": "Prompt Peek Gallery",
+      "short_name": "Prompt Peek",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/android-chrome-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ],
+      "theme_color": "#ffffff",
+      "background_color": "#ffffff",
+      "display": "standalone"
+    }, null, 2) 
+  }
 ];
 
 // 确保清单文件存在
@@ -117,5 +120,38 @@ for (const file of manifestFiles) {
     fs.writeFileSync(targetPath, file.content);
   }
 }
+
+// 创建 _headers 文件的备份，命名为 _headers.txt (解决某些环境的问题)
+const headersPath = path.join(distDir, '_headers');
+const headersTxtPath = path.join(distDir, '_headers.txt');
+
+if (fs.existsSync(headersPath)) {
+  copyFile(headersPath, headersTxtPath);
+}
+
+// 在 index.html 中添加特殊注释，帮助 Cloudflare 识别
+const indexPath = path.join(distDir, 'index.html');
+if (fs.existsSync(indexPath)) {
+  let content = fs.readFileSync(indexPath, 'utf8');
+  if (!content.includes('<!-- Cloudflare Pages SPA -->')) {
+    content = content.replace('</head>', '<!-- Cloudflare Pages SPA -->\n</head>');
+    fs.writeFileSync(indexPath, content);
+    console.log('已添加 Cloudflare Pages SPA 注释到 index.html');
+  }
+}
+
+// 创建一个新的 _redirects.json 文件，帮助 Cloudflare 处理 SPA 路由
+const redirectsJsonPath = path.join(distDir, '_redirects.json');
+fs.writeFileSync(redirectsJsonPath, JSON.stringify({
+  "version": 1,
+  "redirects": [
+    {
+      "source": "/*",
+      "destination": "/index.html",
+      "status": 200
+    }
+  ]
+}, null, 2));
+console.log('已创建 _redirects.json 文件');
 
 console.log('文件复制完成！'); 

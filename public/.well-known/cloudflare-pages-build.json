@@ -1,0 +1,39 @@
+{
+  "build_config": {
+    "destination_dir": "dist",
+    "root_dir": "/"
+  },
+  "deployment_configs": {
+    "main": {
+      "routes": [
+        {
+          "pattern": "/*.js",
+          "zone_name": "promptbox.art",
+          "script": true,
+          "content_type": "application/javascript; charset=utf-8"
+        },
+        {
+          "pattern": "/assets/*.js",
+          "zone_name": "promptbox.art",
+          "script": true,
+          "content_type": "application/javascript; charset=utf-8"
+        },
+        {
+          "pattern": "/*.css",
+          "zone_name": "promptbox.art",
+          "content_type": "text/css; charset=utf-8"
+        },
+        {
+          "pattern": "/site.webmanifest",
+          "zone_name": "promptbox.art",
+          "content_type": "application/manifest+json; charset=utf-8"
+        },
+        {
+          "pattern": "/*",
+          "zone_name": "promptbox.art",
+          "script": false
+        }
+      ]
+    }
+  }
+} 
