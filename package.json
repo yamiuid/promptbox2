@@ -11,7 +11,7 @@
     "dev": "vite",
     "build": "vite build --config vite.config.prod.ts && node ./scripts/copy-files.js",
     "build:dev": "vite build --mode development",
-    "build:cloudflare": "vite build --config vite.config.prod.ts && node ./scripts/copy-files.js && cp src/_worker.js dist/ || true",
+    "build:cloudflare": "vite build --config vite.config.prod.ts && node ./scripts/copy-files.js && node -e \"const fs=require('fs');fs.existsSync('src/_worker.js')&&fs.copyFileSync('src/_worker.js','dist/_worker.js');\" && node ./scripts/cloudflare-deploy.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
