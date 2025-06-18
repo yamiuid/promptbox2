@@ -35,9 +35,18 @@ export default function cloudFlareMimePlugin() {
     },
     transformIndexHtml(html) {
       // 修改index.html中的引用，确保它们指向正确的文件
-      // 在生产环境中，所有.tsx文件都会被编译成.js
-      const modifiedHtml = html.replace(
+      // 在生产环境中，所有TypeScript文件都会被编译成JS
+      let modifiedHtml = html;
+      
+      // 处理.tsx引用
+      modifiedHtml = modifiedHtml.replace(
         /src="\/src\/main\.tsx"/g, 
+        'src="./assets/main.js"'
+      );
+      
+      // 处理.js引用(也可能在源码中出现)
+      modifiedHtml = modifiedHtml.replace(
+        /src="\/src\/main\.js"/g, 
         'src="./assets/main.js"'
       );
       
