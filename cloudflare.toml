@@ -1,58 +1,33 @@
 # Cloudflare Pages 配置文件
-[build]
-  command = "npm run build:cloudflare"
-  publish = "dist"
-  node_version = "18"
 
+[build]
+  command = "bash cloudflare-build.sh"
+  publish = "dist"
+  
 [build.environment]
   NODE_VERSION = "18"
-
-[build.processing]
-  skip_processing = false
-
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.css]
-  bundle = false
-  minify = false
-
-[build.processing.js]
-  bundle = false
-  minify = false
-
-[build.processing.images]
-  compress = false
 
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
+    
 [[headers]]
   for = "/*.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
-
+    
 [[headers]]
   for = "/assets/*.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
-  
+    
 [[headers]]
   for = "/*.css"
   [headers.values]
     Content-Type = "text/css; charset=utf-8"
-
+    
 [[headers]]
   for = "/site.webmanifest"
   [headers.values]
-    Content-Type = "application/manifest+json; charset=utf-8"
-    
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200 
+    Content-Type = "application/manifest+json; charset=utf-8" 

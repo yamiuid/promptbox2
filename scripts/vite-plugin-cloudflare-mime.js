@@ -20,12 +20,28 @@ export default function cloudFlareMimePlugin() {
     },
     // 此函数确保所有 JavaScript 文件都有 .js 扩展名
     generateBundle(options, bundle) {
-      // 不再需要手动添加 .js 扩展名，因为我们在 vite.config.prod.ts 中已经指定了
+      // 输出生成的文件信息，便于调试
       console.log('生成的文件:', Object.keys(bundle));
+      
+      // 为所有JS资源添加正确的mime类型
+      Object.keys(bundle).forEach(fileName => {
+        const asset = bundle[fileName];
+        if (fileName.endsWith('.js')) {
+          if (asset.type === 'asset' || asset.type === 'chunk') {
+            asset.fileName = fileName;
+          }
+        }
+      });
     },
     transformIndexHtml(html) {
-      // 不再需要修改 HTML，因为我们已经在构建配置中指定了正确的扩展名
-      return html;
+      // 修改index.html中的引用，确保它们指向正确的文件
+      // 在生产环境中，所有.tsx文件都会被编译成.js
+      const modifiedHtml = html.replace(
+        /src="\/src\/main\.tsx"/g, 
+        'src="./assets/main.js"'
+      );
+      
+      return modifiedHtml;
     }
   };
 } 
