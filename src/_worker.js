@@ -33,40 +33,74 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     
-    // 尝试从 Assets 中获取资源
-    let response = await env.ASSETS.fetch(request);
-    
-    // 检查是否为 JavaScript 文件
-    if (url.pathname.endsWith('.js') || 
-        url.pathname.includes('assets/') && !url.pathname.includes('.')) {
-      // 对于没有扩展名的资源文件，默认设为 JavaScript 类型
-      const newHeaders = new Headers(response.headers);
-      newHeaders.set('Content-Type', 'application/javascript; charset=utf-8');
+    try {
+      // 获取原始响应
+      let response;
       
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: newHeaders
-      });
-    }
-    
-    // 处理网站清单文件
-    if (url.pathname.endsWith('/site.webmanifest')) {
-      const newHeaders = new Headers(response.headers);
-      newHeaders.set('Content-Type', 'application/manifest+json');
+      try {
+        response = await env.ASSETS.fetch(request);
+      } catch (err) {
+        console.error("获取资源失败:", err);
+        // 如果是SPA路由，返回index.html
+        if (!url.pathname.includes('.')) {
+          return await env.ASSETS.fetch(`${url.origin}/index.html`);
+        }
+        throw err;
+      }
       
-      return new Response(response.body, {
-        status: response.status,
-        statusText: response.statusText,
-        headers: newHeaders
-      });
+      // 设置正确的MIME类型
+      const pathname = url.pathname;
+      const newHeaders = new Headers(response.headers);
+      
+      // JavaScript文件 - 处理所有可能的JS文件
+      if (pathname.endsWith('.js') || 
+          pathname.endsWith('.mjs') || 
+          pathname.endsWith('.tsx') || 
+          pathname.endsWith('.ts') || 
+          pathname.endsWith('.jsx') || 
+          (pathname.includes('/assets/') && !pathname.includes('.'))) {
+        
+        newHeaders.set('Content-Type', 'application/javascript; charset=utf-8');
+        console.log(`设置JavaScript MIME类型: ${pathname}`);
+        return new Response(response.body, { 
+          status: response.status, 
+          headers: newHeaders 
+        });
+      }
+      
+      // 网站清单文件
+      if (pathname.endsWith('.webmanifest') || pathname.includes('manifest.json')) {
+        newHeaders.set('Content-Type', 'application/manifest+json; charset=utf-8');
+        console.log(`设置Manifest MIME类型: ${pathname}`);
+        return new Response(response.body, { 
+          status: response.status, 
+          headers: newHeaders 
+        });
+      }
+      
+      // CSS文件
+      if (pathname.endsWith('.css')) {
+        newHeaders.set('Content-Type', 'text/css; charset=utf-8');
+        return new Response(response.body, { 
+          status: response.status, 
+          headers: newHeaders 
+        });
+      }
+      
+      // SPA路由 - 404时返回index.html
+      if (response.status === 404 && !url.pathname.includes('.')) {
+        return await env.ASSETS.fetch(`${url.origin}/index.html`);
+      }
+      
+      return response;
+    } catch (error) {
+      return new Response(
+        `<!DOCTYPE html><html><head><title>Error</title></head><body><h1>Server Error</h1><p>${error.message || 'Unknown error'}</p></body></html>`, 
+        { 
+          status: 500, 
+          headers: { 'Content-Type': 'text/html' } 
+        }
+      );
     }
-    
-    // 处理 SPA 路由 - 如果是 404 但不是资源文件，返回 index.html
-    if (response.status === 404 && !url.pathname.includes('.')) {
-      response = await env.ASSETS.fetch(`${url.origin}/index.html`);
-    }
-    
-    return response;
   }
 } 
