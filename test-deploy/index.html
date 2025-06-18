@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>测试页面</title>
+    <link rel="manifest" href="/manifest.json" type="application/manifest+json">
+    <script type="module">
+      console.log('测试脚本加载');
+      document.getElementById('status').textContent = '脚本成功加载';
+    </script>
+  </head>
+
+  <body>
+    <h1>Cloudflare Pages 测试页面</h1>
+    <p id="status">如果JavaScript正常工作，这段文字将被替换</p>
+  </body>
+</html> 

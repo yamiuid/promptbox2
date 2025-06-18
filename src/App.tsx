@@ -30,26 +30,26 @@ const PageTracker = () => {
 
 const App = () => (
   <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <PageTracker />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/artwork/:id" element={<ArtworkDetail />} />
-            <Route path="/upload" element={<Upload />} />
-            <Route path="/my-content" element={<MyContent />} />
-            <Route path="/my-favorites" element={<MyFavorites />} />
-            <Route path="/my-likes" element={<MyLikes />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <PageTracker />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/artwork/:id" element={<ArtworkDetail />} />
+          <Route path="/upload" element={<Upload />} />
+          <Route path="/my-content" element={<MyContent />} />
+          <Route path="/my-favorites" element={<MyFavorites />} />
+          <Route path="/my-likes" element={<MyLikes />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
   </ErrorBoundary>
 );
 
