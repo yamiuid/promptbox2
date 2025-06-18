@@ -30,4 +30,4 @@
 [[headers]]
   for = "/site.webmanifest"
   [headers.values]
-    Content-Type = "application/manifest+json; charset=utf-8" 
+    Content-Type = "application/manifest+json; charset=utf-8"
